@@ -6,7 +6,7 @@ DeepSeek Harness，拿到真正的 Harness 客户端，而不是删减过的远�
 **简体中文** | [English](README.md)
 
 [![License](https://img.shields.io/github/license/icrefin/dsh-remote-access?style=flat-square)](LICENSE)
-[![Release](https://img.shields.io/github/v/release/icrefin/dsh-remote-access?style=flat-square)](https://github.com/icrefin/dsh-remote-access/releases/tag/v0.1.2)
+[![Release](https://img.shields.io/github/v/release/icrefin/dsh-remote-access?style=flat-square)](https://github.com/icrefin/dsh-remote-access/releases/tag/v0.1.3)
 [![CI](https://img.shields.io/github/actions/workflow/status/icrefin/dsh-remote-access/ci.yml?branch=main&style=flat-square)](https://github.com/icrefin/dsh-remote-access/actions/workflows/ci.yml)
 [![Last commit](https://img.shields.io/github/last-commit/icrefin/dsh-remote-access?style=flat-square)](https://github.com/icrefin/dsh-remote-access/commits/main)
 [![Stars](https://img.shields.io/github/stars/icrefin/dsh-remote-access?style=flat-square)](https://github.com/icrefin/dsh-remote-access/stargazers)
@@ -15,7 +15,7 @@ DeepSeek Harness，拿到真正的 Harness 客户端，而不是删减过的远�
 [![dsh](https://img.shields.io/badge/dsh-0.2.1--rc.5-4B5563?style=flat-square)](https://github.com/deepseek-ai/deepseek-harness)
 
 ```
-设置/侧边栏 ▸ Remote Access
+设置 ▸ Remote Access
 └── 监听状态 · 可直接打开的链接 · 绑定地址 · 可选访问密钥
 ```
 
@@ -61,7 +61,7 @@ bundle 要等到下一次启动才能被导入。
 
 ## 使用
 
-1. 打开侧边栏的 **Remote Access** 行。
+1. 打开 **设置 → Remote Access**。
 2. 按 **启用 mesh 访问**。面板会绑定检测到的网格地址，并显示一条或多条链接。
 3. 在同一网格内的设备上打开链接。不会询问密钥：私有网络本身就是访问边界，你在 Tailscale
    （或 ZeroTier、NetBird）里已经管理的成员关系就是授权。
@@ -80,7 +80,7 @@ bundle 要等到下一次启动才能被导入。
 | 主机路由 `GET /api/dsh-remote-access/key` | 链接（明文，或开启密钥后带密钥） |
 | 主机路由 `POST /api/dsh-remote-access/regenerate` | 更换密钥，并使所有 cookie 失效 |
 | 网关 `http://<mesh-address>:3080/` | 可选密钥校验，然后在回环上转发 harness |
-| 侧边栏 **Remote Access** 行 | 驱动上述一切的面板 |
+| 设置中的 **Remote Access** 分节 | 驱动上述一切的面板 |
 
 ## 安全模型
 
@@ -152,7 +152,7 @@ scripts/dev-profile.sh remove
 | `src/mesh/detect.ts` | 网卡分类器与 Tailscale 读取 |
 | `src/mesh/secret.ts` | 密钥文件 |
 | `src/routes.ts` | 面板的路由族 |
-| `src/client/` | 浏览器半：侧边栏行、页面、词典、样式 |
+| `src/client/` | 浏览器半：设置分节、词典、样式 |
 | `cordis.patch.yml` | 插入 Loader 行的 bundle patch |
 
 ## 贡献

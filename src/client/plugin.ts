@@ -12,7 +12,7 @@
 /** Dictionary namespace owned by this plugin. */
 export const NS = 'dshRemoteAccess'
 
-/** The id shared by the sidebar row and the main panel it opens. */
+/** The settings-section id; it is also the slot entry key. */
 export const PANEL_ID = 'dshRemoteAccess'
 
 /** Services required by the two registrations. */

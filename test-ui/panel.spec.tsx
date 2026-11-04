@@ -17,6 +17,7 @@
 import { createRoot, type Root } from 'react-dom/client'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { Panel } from '../src/client/Panel.tsx'
+import { apply } from '../src/client/index.tsx'
 import { en, type PanelTranslate } from '../src/client/locales.ts'
 import { VERSION, type MeshConfigResult, type MeshKeyPayload, type MeshStatus } from '../src/protocol.ts'
 
@@ -153,5 +154,41 @@ describe('the Remote Access panel', () => {
     await settle()
     expect(container.textContent).toContain('No mesh interface is available')
     expect(container.textContent).toContain('no private mesh interface is available')
+  })
+})
+
+describe('the client registration', () => {
+  /** Minimal slot service: record every registration and run every inject. */
+  function fakeContext(order: Array<{ name: string; id: string; order: number; label: string }>): unknown {
+    return {
+      effect: (callback: () => (() => void) | void) => {
+        const disposer = callback()
+        return () => {
+          if (typeof disposer === 'function') disposer()
+        }
+      },
+      locale: {
+        register: () => () => {},
+        bind: () => t,
+      },
+      slots: {
+        inject: (_key: string, callback: () => () => void) => {
+          const disposer = callback()
+          return disposer
+        },
+        register: (options: { name: string; id: string; order: number; label: () => string }) => {
+          order.push({ name: options.name, id: options.id, order: options.order, label: options.label() })
+          return () => {}
+        },
+      },
+    }
+  }
+
+  it('contributes exactly one settings section, and no sidebar or main slot', () => {
+    const registered: Array<{ name: string; id: string; order: number; label: string }> = []
+    apply(fakeContext(registered) as never)
+    expect(registered).toEqual([
+      { name: 'settings.section', id: 'dshRemoteAccess', order: 45, label: 'Remote Access' },
+    ])
   })
 })

@@ -7,7 +7,7 @@ Harness client, not a cut-down remote control. One switch, one link.
 **English** | [简体中文](README.zh-CN.md)
 
 [![License](https://img.shields.io/github/license/icrefin/dsh-remote-access?style=flat-square)](LICENSE)
-[![Release](https://img.shields.io/github/v/release/icrefin/dsh-remote-access?style=flat-square)](https://github.com/icrefin/dsh-remote-access/releases/tag/v0.1.2)
+[![Release](https://img.shields.io/github/v/release/icrefin/dsh-remote-access?style=flat-square)](https://github.com/icrefin/dsh-remote-access/releases/tag/v0.1.3)
 [![CI](https://img.shields.io/github/actions/workflow/status/icrefin/dsh-remote-access/ci.yml?branch=main&style=flat-square)](https://github.com/icrefin/dsh-remote-access/actions/workflows/ci.yml)
 [![Last commit](https://img.shields.io/github/last-commit/icrefin/dsh-remote-access?style=flat-square)](https://github.com/icrefin/dsh-remote-access/commits/main)
 [![Stars](https://img.shields.io/github/stars/icrefin/dsh-remote-access?style=flat-square)](https://github.com/icrefin/dsh-remote-access/stargazers)
@@ -16,7 +16,7 @@ Harness client, not a cut-down remote control. One switch, one link.
 [![dsh](https://img.shields.io/badge/dsh-0.2.1--rc.5-4B5563?style=flat-square)](https://github.com/deepseek-ai/deepseek-harness)
 
 ```
-Settings/Sidebar ▸ Remote Access
+Settings ▸ Remote Access
 └── listener status · ready-to-open links · bind address · optional key
 ```
 
@@ -54,7 +54,7 @@ plain HTTP on `3080`; it never pretends to terminate TLS.
 
 ```sh
 pnpm install
-pnpm check        # typecheck both halves, build, run 85 tests
+pnpm check        # typecheck both halves, build, run 80 tests
 pnpm run pack     # -> dist/dsh-remote-access-0.1.2.tgz
 scripts/install.sh
 ```
@@ -67,7 +67,7 @@ it on.
 
 ## Use
 
-1. Open the sidebar row **Remote Access**.
+1. Open **Settings → Remote Access**.
 2. Press **Enable mesh access**. The panel binds the detected mesh address and
    shows one or more links.
 3. Open a link on a device in the same mesh. No key is asked for: the private
@@ -89,7 +89,7 @@ dotted address is listed next to it.
 | Host route `GET /api/dsh-remote-access/key` | links (plain, or with the key when it is on) |
 | Host route `POST /api/dsh-remote-access/regenerate` | replaces the key and invalidates every cookie |
 | Gateway `http://<mesh-address>:3080/` | optional key gate, then a replay of the harness over loopback |
-| Sidebar row **Remote Access** | the page that drives all of the above |
+| Settings section **Remote Access** | the section that drives all of the above |
 
 ## Security model
 
@@ -173,7 +173,7 @@ and the gateway is driven end to end over `fetch` and a raw WebSocket handshake.
 | `src/mesh/detect.ts` | interface classifier and Tailscale reader |
 | `src/mesh/secret.ts` | the key file |
 | `src/routes.ts` | the panel's route family |
-| `src/client/` | browser half: sidebar row, page, dictionaries, styles |
+| `src/client/` | browser half: settings section, dictionaries, styles |
 | `cordis.patch.yml` | the bundle patch that inserts the Loader row |
 
 ## Contributing

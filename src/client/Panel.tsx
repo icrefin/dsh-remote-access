@@ -1,5 +1,5 @@
 /**
- * The Remote Access page.
+ * The Remote Access settings section.
  *
  * Three cards: what the listener is doing, the links a device on the mesh can
  * open, and the settings that decide where it listens. Every request path is the
@@ -20,7 +20,7 @@ import {
 } from '../protocol.ts'
 import type { PanelTranslate } from './locales.ts'
 
-/** Props composed by the slot framework for this key of the `main` slot. */
+/** Props composed by the slot framework for this key of `settings.section`. */
 export interface PanelProps {
   /** Framework-injected translate seat. */
   t: PanelTranslate
@@ -95,7 +95,7 @@ function readBind(bindHost: string): { mode: BindMode; host: string } {
 }
 
 /**
- * Render the panel.
+ * Render the settings section.
  * @param props - the framework-injected translate seat.
  * @returns the panel element tree.
  */
@@ -256,180 +256,178 @@ export function Panel({ t }: PanelProps): ReactElement {
 
   return (
     <div className="dra-page">
-      <div className="dra-inner">
-        <header className="dra-header">
-          <div className="dra-titleRow">
-            <h1 className="dra-title">{t('title')}</h1>
-            <span className="dra-chip">{t('credit', { version: VERSION })}</span>
-          </div>
-          <p className="dra-intro">{t('description')}</p>
-        </header>
+      <header className="dra-header">
+        <div className="dra-titleRow">
+          <h1 className="dra-title">{t('title')}</h1>
+          <span className="dra-chip">{t('credit', { version: VERSION })}</span>
+        </div>
+        <p className="dra-intro">{t('description')}</p>
+      </header>
 
-        {error === undefined ? null : (
-          <div className="dra-error" role="alert">
-            {t('loadFailed')}: {error}
+      {error === undefined ? null : (
+        <div className="dra-error" role="alert">
+          {t('loadFailed')}: {error}
+        </div>
+      )}
+
+      <section className="dra-card">
+        <div className="dra-cardHead">
+          <h2 className="dra-subtitle">{t('status')}</h2>
+          <span className={pillClass}>{pillLabel}</span>
+        </div>
+        <dl className="dra-facts">
+          <div className="dra-fact">
+            <dt>{t('address')}</dt>
+            <dd>{status === undefined || status.address.length === 0 ? '—' : `${status.address}:${status.port}`}</dd>
           </div>
+          <div className="dra-fact">
+            <dt>{t('meshNetwork')}</dt>
+            <dd>{networkLabel}</dd>
+          </div>
+          <div className="dra-fact">
+            <dt>{t('upstream')}</dt>
+            <dd>127.0.0.1:{status?.upstreamPort ?? '—'}</dd>
+          </div>
+        </dl>
+        {status?.error === undefined ? null : (
+          <p className="dra-error dra-errorInline" role="status">
+            {status.error}
+          </p>
         )}
-
-        <section className="dra-card">
-          <div className="dra-cardHead">
-            <h2 className="dra-subtitle">{t('status')}</h2>
-            <span className={pillClass}>{pillLabel}</span>
+        <div className="dra-actions">
+          <button type="button" className="dra-button dra-button-primary" onClick={() => void toggle()} disabled={busy || status === undefined}>
+            {busy ? t('enabling') : status?.enabled === true ? t('disable') : t('enable')}
+          </button>
+          <button type="button" className="dra-button" onClick={() => void load()} disabled={busy}>
+            {t('retry')}
+          </button>
+        </div>
+        {status?.enabled === true && status.bound === false ? (
+          <div className="dra-note">
+            <strong>{t('noMeshTitle')}</strong>
+            <p>{t('noMeshHint')}</p>
           </div>
-          <dl className="dra-facts">
-            <div className="dra-fact">
-              <dt>{t('address')}</dt>
-              <dd>{status === undefined || status.address.length === 0 ? '—' : `${status.address}:${status.port}`}</dd>
-            </div>
-            <div className="dra-fact">
-              <dt>{t('meshNetwork')}</dt>
-              <dd>{networkLabel}</dd>
-            </div>
-            <div className="dra-fact">
-              <dt>{t('upstream')}</dt>
-              <dd>127.0.0.1:{status?.upstreamPort ?? '—'}</dd>
-            </div>
-          </dl>
-          {status?.error === undefined ? null : (
-            <p className="dra-error dra-errorInline" role="status">
-              {status.error}
-            </p>
-          )}
-          <div className="dra-actions">
-            <button type="button" className="dra-button dra-button-primary" onClick={() => void toggle()} disabled={busy || status === undefined}>
-              {busy ? t('enabling') : status?.enabled === true ? t('disable') : t('enable')}
-            </button>
-            <button type="button" className="dra-button" onClick={() => void load()} disabled={busy}>
-              {t('retry')}
-            </button>
-          </div>
-          {status?.enabled === true && status.bound === false ? (
-            <div className="dra-note">
-              <strong>{t('noMeshTitle')}</strong>
-              <p>{t('noMeshHint')}</p>
-            </div>
-          ) : null}
-        </section>
+        ) : null}
+      </section>
 
-        <section className="dra-card">
-          <h2 className="dra-subtitle">{t('access')}</h2>
-          <p className="dra-hint">{t('accessHint')}</p>
-          {(access?.urls.length ?? 0) === 0 ? (
-            <p className="dra-hint">{t('noUrls')}</p>
-          ) : (
-            <ul className="dra-links">
-              {access?.urls.map((url) => (
-                <li key={url} className="dra-linkRow">
-                  {keyRequired ? (
-                    <div className="dra-secret">
-                      <input
-                        className="dra-input dra-inputMono dra-inputSecret"
-                        readOnly
-                        value={revealed[url] === true ? url : maskUrl(url)}
-                        aria-label={t('access')}
-                        onFocus={(event) => event.currentTarget.select()}
-                      />
-                      <button
-                        type="button"
-                        className="dra-eye"
-                        aria-label={revealed[url] === true ? t('hideKey') : t('showKey')}
-                        title={revealed[url] === true ? t('hideKey') : t('showKey')}
-                        onClick={() => setRevealed((current) => ({ ...current, [url]: current[url] !== true }))}
-                      >
-                        <EyeIcon open={revealed[url] === true} />
-                      </button>
-                    </div>
-                  ) : (
+      <section className="dra-card">
+        <h2 className="dra-subtitle">{t('access')}</h2>
+        <p className="dra-hint">{t('accessHint')}</p>
+        {(access?.urls.length ?? 0) === 0 ? (
+          <p className="dra-hint">{t('noUrls')}</p>
+        ) : (
+          <ul className="dra-links">
+            {access?.urls.map((url) => (
+              <li key={url} className="dra-linkRow">
+                {keyRequired ? (
+                  <div className="dra-secret">
                     <input
-                      className="dra-input dra-inputMono"
+                      className="dra-input dra-inputMono dra-inputSecret"
                       readOnly
-                      value={url}
+                      value={revealed[url] === true ? url : maskUrl(url)}
                       aria-label={t('access')}
                       onFocus={(event) => event.currentTarget.select()}
                     />
-                  )}
-                  <button type="button" className="dra-button" onClick={() => void copy(url)}>
-                    {copied === url ? t('copied') : t('copy')}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-          <p className="dra-hint">{keyRequired ? t('keyHint') : t('openHint')}</p>
-          {keyRequired && access !== undefined && access.urls.length > 0 ? (
-            <div className="dra-actions">
-              <button type="button" className="dra-button dra-button-danger" onClick={() => void regenerate()} disabled={busy}>
-                {t('regenerate')}
-              </button>
-            </div>
-          ) : null}
-        </section>
-
-        <section className="dra-card">
-          <h2 className="dra-subtitle">{t('settings')}</h2>
-          <div className="dra-field">
-            <label className="dra-label" htmlFor="dra-port">
-              {t('port')}
-            </label>
-            <input
-              id="dra-port"
-              className="dra-input dra-inputShort"
-              inputMode="numeric"
-              value={portDraft}
-              onChange={(event) => setPortDraft(event.target.value)}
-            />
-          </div>
-          <div className="dra-field">
-            <label className="dra-label" htmlFor="dra-bind">
-              {t('bindAddress')}
-            </label>
-            <select
-              id="dra-bind"
-              className="dra-input"
-              value={mode}
-              onChange={(event) => setMode(event.target.value as BindMode)}
-            >
-              <option value="auto">{t('bindAuto')}</option>
-              <option value="all">{t('bindAll')}</option>
-              <option value="custom">{t('bindCustom')}</option>
-            </select>
-            {mode === 'custom' ? (
-              <input
-                className="dra-input dra-inputMono"
-                placeholder={t('customPlaceholder')}
-                value={customHost}
-                onChange={(event) => setCustomHost(event.target.value)}
-                aria-label={t('bindAddress')}
-              />
-            ) : null}
-            {mode === 'all' ? <p className="dra-warning">{t('allWarning')}</p> : null}
-          </div>
-          <div className="dra-field dra-fieldRow">
-            <label className="dra-switchLabel" htmlFor="dra-key">
-              <input
-                id="dra-key"
-                type="checkbox"
-                checked={requireKeyDraft}
-                onChange={(event) => setRequireKeyDraft(event.target.checked)}
-              />
-              <span>{t('keyRequired')}</span>
-            </label>
-            <p className="dra-hint">{t('keyRequiredHint')}</p>
-          </div>
+                    <button
+                      type="button"
+                      className="dra-eye"
+                      aria-label={revealed[url] === true ? t('hideKey') : t('showKey')}
+                      title={revealed[url] === true ? t('hideKey') : t('showKey')}
+                      onClick={() => setRevealed((current) => ({ ...current, [url]: current[url] !== true }))}
+                    >
+                      <EyeIcon open={revealed[url] === true} />
+                    </button>
+                  </div>
+                ) : (
+                  <input
+                    className="dra-input dra-inputMono"
+                    readOnly
+                    value={url}
+                    aria-label={t('access')}
+                    onFocus={(event) => event.currentTarget.select()}
+                  />
+                )}
+                <button type="button" className="dra-button" onClick={() => void copy(url)}>
+                  {copied === url ? t('copied') : t('copy')}
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+        <p className="dra-hint">{keyRequired ? t('keyHint') : t('openHint')}</p>
+        {keyRequired && access !== undefined && access.urls.length > 0 ? (
           <div className="dra-actions">
-            <button type="button" className="dra-button dra-button-primary" onClick={() => void applySettings()} disabled={busy}>
-              {busy ? t('applying') : t('apply')}
+            <button type="button" className="dra-button dra-button-danger" onClick={() => void regenerate()} disabled={busy}>
+              {t('regenerate')}
             </button>
-            {notice === 'saved' ? <span className="dra-saved">{t('saved')}</span> : null}
-            {notice === 'notSaved' ? (
-              <span className="dra-saved dra-saved-warn" title={saveError}>
-                {t('notSaved')}
-                {saveError === undefined ? '' : `: ${saveError}`}
-              </span>
-            ) : null}
           </div>
-        </section>
-      </div>
+        ) : null}
+      </section>
+
+      <section className="dra-card">
+        <h2 className="dra-subtitle">{t('settings')}</h2>
+        <div className="dra-field">
+          <label className="dra-label" htmlFor="dra-port">
+            {t('port')}
+          </label>
+          <input
+            id="dra-port"
+            className="dra-input dra-inputShort"
+            inputMode="numeric"
+            value={portDraft}
+            onChange={(event) => setPortDraft(event.target.value)}
+          />
+        </div>
+        <div className="dra-field">
+          <label className="dra-label" htmlFor="dra-bind">
+            {t('bindAddress')}
+          </label>
+          <select
+            id="dra-bind"
+            className="dra-input"
+            value={mode}
+            onChange={(event) => setMode(event.target.value as BindMode)}
+          >
+            <option value="auto">{t('bindAuto')}</option>
+            <option value="all">{t('bindAll')}</option>
+            <option value="custom">{t('bindCustom')}</option>
+          </select>
+          {mode === 'custom' ? (
+            <input
+              className="dra-input dra-inputMono"
+              placeholder={t('customPlaceholder')}
+              value={customHost}
+              onChange={(event) => setCustomHost(event.target.value)}
+              aria-label={t('bindAddress')}
+            />
+          ) : null}
+          {mode === 'all' ? <p className="dra-warning">{t('allWarning')}</p> : null}
+        </div>
+        <div className="dra-field dra-fieldRow">
+          <label className="dra-switchLabel" htmlFor="dra-key">
+            <input
+              id="dra-key"
+              type="checkbox"
+              checked={requireKeyDraft}
+              onChange={(event) => setRequireKeyDraft(event.target.checked)}
+            />
+            <span>{t('keyRequired')}</span>
+          </label>
+          <p className="dra-hint">{t('keyRequiredHint')}</p>
+        </div>
+        <div className="dra-actions">
+          <button type="button" className="dra-button dra-button-primary" onClick={() => void applySettings()} disabled={busy}>
+            {busy ? t('applying') : t('apply')}
+          </button>
+          {notice === 'saved' ? <span className="dra-saved">{t('saved')}</span> : null}
+          {notice === 'notSaved' ? (
+            <span className="dra-saved dra-saved-warn" title={saveError}>
+              {t('notSaved')}
+              {saveError === undefined ? '' : `: ${saveError}`}
+            </span>
+          ) : null}
+        </div>
+      </section>
     </div>
   )
 }

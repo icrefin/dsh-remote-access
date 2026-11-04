@@ -18,14 +18,18 @@ export const STYLE_ID = 'dsh-remote-access-style'
 
 /** Theme-token-only stylesheet for the panel. */
 export const PANEL_CSS = `
-.dra-page{height:100%;overflow:auto;background:var(--dsw-alias-bg-base);color:var(--dsw-alias-label-primary);font-size:13px;line-height:20px;-webkit-font-smoothing:antialiased}
-.dra-inner{max-width:960px;margin:0 auto;padding:0 clamp(24px,4vw,48px) 48px;display:flex;flex-direction:column;gap:24px}
-.dra-header{padding-top:28px}
-[data-platform=darwin] .dra-header{padding-top:calc(28px + var(--dsh-frame-top-clearance,0px))}
+/* The section body, not a page. The Settings shell renders this into its own
+   scrolling container (padding: 0 24px 24px; overflow-y: auto), so this rule
+   deliberately sets no height, no overflow, no max-width and no horizontal
+   padding — any of those would double what the shell already does. The centred
+   960px column and the frame clearance in the repo style contract belong to a
+   centre-column view, which this is not. */
+.dra-page{display:flex;flex-direction:column;gap:24px;box-sizing:border-box;color:var(--dsw-alias-label-primary);font-size:13px;line-height:20px;-webkit-font-smoothing:antialiased}
+.dra-header{display:flex;flex-direction:column;gap:8px;padding-top:4px}
 .dra-titleRow{display:flex;align-items:center;flex-wrap:wrap}
 .dra-title{margin:0;font-size:20px;font-weight:500;line-height:28px}
 .dra-chip{margin-left:6px;padding:1px 8px;border:0.5px solid var(--dsw-alias-border-l3);border-radius:999px;background:var(--dsw-alias-bg-module-platform);color:var(--dsw-alias-label-caption);font-size:12px;font-weight:500;line-height:18px;white-space:nowrap;font-variant-numeric:tabular-nums}
-.dra-intro{margin:6px 0 0;max-width:64ch;font-size:13px;line-height:20px;color:var(--dsw-alias-label-secondary)}
+.dra-intro{margin:0;max-width:64ch;font-size:13px;line-height:20px;color:var(--dsw-alias-label-secondary)}
 
 .dra-card{border:1px solid var(--dsw-alias-border-l2);border-radius:12px;background:var(--dsw-alias-bg-layer-1);padding:20px;display:flex;flex-direction:column;gap:14px}
 .dra-cardHead{display:flex;align-items:center;justify-content:space-between;gap:12px}

@@ -1,14 +1,20 @@
 /**
  * dsh-remote-access — browser half.
  *
- * Contributes one row to the sidebar's global panel list (`sidebar.panellist`)
- * and the page it opens in the centre column (`main`), both keyed by
- * `dshRemoteAccess`. Selecting the row is a layout lookup in the live `main`
- * registry, so the two registrations must share the id by construction.
+ * Contributes one entry to the settings navigation (`settings.section`), keyed
+ * by `dshRemoteAccess`. The Settings shell owns the trigger, the panel, the nav
+ * list and the scrolling container; this plugin only supplies the section body.
  *
- * `dsh.client.inject` in package.json orders this bundle after the two packages
- * that declare those slots, so both `slots.inject` calls resolve instead of
- * racing the declaration.
+ * That seat was chosen over a sidebar row plus a centre-column page, which an
+ * earlier revision used. Remote access is a thing you configure once and glance
+ * at when a device cannot connect; a permanent rail icon and a whole page in
+ * the main column overstated it, and the settings shell already provides the
+ * chrome this panel would otherwise redraw.
+ *
+ * `dsh.client.inject` in package.json orders this bundle after
+ * `@deepseek-ai/dsh-client-ui-settings-general`, which is the package that
+ * declares `settings.section` (and registers the General section itself), so the
+ * `slots.inject` below resolves instead of racing the declaration.
  *
  * This module is bundled into the loader's factory form; its top-level side
  * effects run at materialization, which is when the client module system claims
@@ -17,12 +23,12 @@
  * @module dsh-remote-access/client
  */
 
-import type { ReactElement } from 'react'
 import type { SlotCore, TranslateNS } from '@deepseek-ai/dsh-client-ui-slots'
-// Type-only imports for their declaration merging: these are the packages that
-// declare `main` and `sidebar.panellist` in SlotMap.
-import type {} from '@deepseek-ai/dsh-client-ui-layout/client'
-import type {} from '@deepseek-ai/dsh-client-ui-sidebar/client'
+// Type-only import for its `declare module` augmentation: `ui-settings` owns the
+// canonical settings slot contract, so this is what makes `'settings.section'` a
+// known key of SlotMap — and therefore what makes a typo in the slot id or its
+// options a compile error instead of a silent no-op at runtime.
+import type {} from '@deepseek-ai/dsh-client-ui-settings/client'
 import { Panel } from './Panel.tsx'
 import { en, zh, type PanelTranslate } from './locales.ts'
 // The ids and the injection list live in a plain `.ts` module so a test can
@@ -62,44 +68,17 @@ interface ClientContext {
   locale: LocaleService
 }
 
-/** Geometry the sidebar hands its panel rows. */
-interface PanelIconProps {
-  /** Requested square edge in pixels (16 expanded, 18 in the rail). */
-  size: number
-  /** Whether this panel is the selected main panel. */
-  active: boolean
-}
-
 /**
- * The global-panel row glyph, drawn in `currentColor` so the sidebar's own
- * active and idle colors apply.
- * @param props - requested size and selection state.
- * @returns the inline SVG glyph.
+ * Where the section sits in the settings navigation.
+ *
+ * The shell's own sections use `-10` (Account) and `0` (General); a positive
+ * order puts a plugin's section after the built-ins. This one follows Notify
+ * Push's `40`, so the two network-facing sections stay adjacent.
  */
-function PanelIcon({ size, active }: PanelIconProps): ReactElement {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 16 16"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={active ? 1.5 : 1.3}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      focusable="false"
-    >
-      <circle cx="8" cy="10.1" r="2.1" />
-      <circle cx="3.4" cy="4.2" r="1.5" />
-      <circle cx="12.6" cy="4.2" r="1.5" />
-      <path d="M6.6 8.6 4.5 5.7M9.4 8.6l2.1-2.9" />
-    </svg>
-  )
-}
+const SECTION_ORDER = 45
 
 /**
- * Register the sidebar row and the page it opens.
+ * Register the settings section.
  *
  * An external plugin must never take the web shell down with it, so mounting
  * failures are logged rather than thrown: the shell fails the whole boot when a
@@ -114,29 +93,24 @@ export function apply(ctx: ClientContext): void {
 
     ctx.effect(
       () =>
-        ctx.slots.inject('sidebar.panellist', () =>
+        ctx.slots.inject('settings.section', () =>
           ctx.slots.register(
             {
-              name: 'sidebar.panellist',
+              name: 'settings.section',
               id: PANEL_ID,
-              order: 50,
+              order: SECTION_ORDER,
+              // A function, not a string: the nav list folds this on every
+              // locale revision, so the entry follows the language setting.
               label: () => t('panel'),
+              locale: NS,
             },
-            PanelIcon,
+            Panel,
           ),
         ),
-      'dsh-remote-access: sidebar entry',
-    )
-
-    ctx.effect(
-      () =>
-        ctx.slots.inject('main', () =>
-          ctx.slots.register({ name: 'main', key: PANEL_ID, locale: NS }, Panel),
-        ),
-      'dsh-remote-access: main panel',
+      'dsh-remote-access: settings section',
     )
   } catch (error) {
-    console.warn('[dsh-remote-access] the panel could not mount', error)
+    console.warn('[dsh-remote-access] the settings section could not mount', error)
   }
 }
 
