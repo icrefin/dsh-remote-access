@@ -49,7 +49,7 @@ Web 服务器就已经绑定在回环地址的一个随机端口上。没有任�
 
 ```sh
 pnpm install
-pnpm check        # 两半都做类型检查、构建、运行 85 个测试
+pnpm check        # 两半都做类型检查、构建、运行 86 个测试
 pnpm run pack     # -> dist/dsh-remote-access-0.1.2.tgz
 scripts/install.sh
 ```
