@@ -1,0 +1,26 @@
+blank_issues_enabled: false
+
+# Optional: point people somewhere better than a blank issue. Uncomment and edit the
+# entries below. Each entry REQUIRES exactly these three keys: name, url, about.
+# GitHub rejects the whole file if a key is missing or if a URL is not http(s).
+#
+# contact_links:
+#   - name: Questions and usage help
+#     url: https://github.com/icrefin/dsh-remote-access/discussions
+#     about: Ask and answer usage questions, and share what you built, in Discussions.
+#
+#   - name: Security vulnerability
+#     url: https://github.com/icrefin/dsh-remote-access/security/advisories/new
+#     about: Report a vulnerability privately. Never open a public issue for security.
+#
+#   - name: Documentation
+#     url: https://github.com/icrefin/dsh-remote-access
+#     about: Read the docs, guides, and examples before opening an issue.
+#
+#   - name: Contributing guide
+#     url: https://github.com/icrefin/dsh-remote-access/blob/main/CONTRIBUTING.md
+#     about: Read how to set up the project and submit a pull request.
+#
+#   - name: Community chat
+#     url: https://example.com/chat
+#     about: Join the chat for quick questions (replace with your real invite link).
