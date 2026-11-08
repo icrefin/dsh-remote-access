@@ -11,7 +11,7 @@ DeepSeek Harness，拿到真正的 Harness 客户端，而不是删减过的远�
 [![Last commit](https://img.shields.io/github/last-commit/icrefin/dsh-remote-access?style=flat-square)](https://github.com/icrefin/dsh-remote-access/commits/main)
 [![Stars](https://img.shields.io/github/stars/icrefin/dsh-remote-access?style=flat-square)](https://github.com/icrefin/dsh-remote-access/stargazers)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)](https://github.com/icrefin/dsh-remote-access/pulls)
-[![Node](https://img.shields.io/badge/node-%3E%3D22.17-339933?style=flat-square&logo=node.js)](https://nodejs.org)
+[![Node](https://img.shields.io/badge/node-%3E%3D24.9-339933?style=flat-square&logo=node.js)](https://nodejs.org)
 [![dsh](https://img.shields.io/badge/dsh-0.2.1--rc.5-4B5563?style=flat-square)](https://github.com/deepseek-ai/deepseek-harness)
 
 ```

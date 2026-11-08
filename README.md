@@ -4,17 +4,6 @@ Reach this DeepSeek Harness from your phone, tablet, or another computer over a
 **private mesh network** — Tailscale, ZeroTier, NetBird — and get the real
 Harness client, not a cut-down remote control. One switch, one link.
 
-**English** | [简体中文](README.zh-CN.md)
-
-[![License](https://img.shields.io/github/license/icrefin/dsh-remote-access?style=flat-square)](LICENSE)
-[![Release](https://img.shields.io/github/v/release/icrefin/dsh-remote-access?style=flat-square)](https://github.com/icrefin/dsh-remote-access/releases/tag/v0.1.3)
-[![CI](https://img.shields.io/github/actions/workflow/status/icrefin/dsh-remote-access/ci.yml?branch=main&style=flat-square)](https://github.com/icrefin/dsh-remote-access/actions/workflows/ci.yml)
-[![Last commit](https://img.shields.io/github/last-commit/icrefin/dsh-remote-access?style=flat-square)](https://github.com/icrefin/dsh-remote-access/commits/main)
-[![Stars](https://img.shields.io/github/stars/icrefin/dsh-remote-access?style=flat-square)](https://github.com/icrefin/dsh-remote-access/stargazers)
-[![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)](https://github.com/icrefin/dsh-remote-access/pulls)
-[![Node](https://img.shields.io/badge/node-%3E%3D22.17-339933?style=flat-square&logo=node.js)](https://nodejs.org)
-[![dsh](https://img.shields.io/badge/dsh-0.2.1--rc.5-4B5563?style=flat-square)](https://github.com/deepseek-ai/deepseek-harness)
-
 ```
 Settings ▸ Remote Access
 └── listener status · ready-to-open links · bind address · optional key
@@ -55,7 +44,7 @@ plain HTTP on `3080`; it never pretends to terminate TLS.
 ```sh
 pnpm install
 pnpm check        # typecheck both halves, build, run 86 tests
-pnpm run pack     # -> dist/dsh-remote-access-0.1.2.tgz
+pnpm run pack     # -> dist/dsh-remote-access-0.1.4.tgz
 scripts/install.sh
 ```
 
@@ -176,17 +165,6 @@ and the gateway is driven end to end over `fetch` and a raw WebSocket handshake.
 | `src/client/` | browser half: settings section, dictionaries, styles |
 | `cordis.patch.yml` | the bundle patch that inserts the Loader row |
 
-## Contributing
-
-Issues and pull requests are welcome — the bug form asks which step of the access
-path broke, which is usually enough to reproduce. [CONTRIBUTING.md](.github/CONTRIBUTING.md)
-has the commands and the map of what each spec pins. Report vulnerabilities through
-[SECURITY.md](.github/SECURITY.md) rather than a public issue. This project follows
-the [Contributor Covenant](.github/CODE_OF_CONDUCT.md).
-
-> If remote access from your phone saves you the trip to the desktop, a ⭐ star
-> helps other DSH users find it.
-
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT
