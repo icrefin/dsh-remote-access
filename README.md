@@ -44,7 +44,7 @@ plain HTTP on `3080`; it never pretends to terminate TLS.
 ```sh
 pnpm install
 pnpm check        # typecheck both halves, build, run 86 tests
-pnpm run pack     # -> dist/dsh-remote-access-0.1.4.tgz
+pnpm run pack     # -> dist/dsh-remote-access-0.1.5.tgz
 scripts/install.sh
 ```
 

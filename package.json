@@ -1,6 +1,6 @@
 {
   "name": "dsh-remote-access",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Remote access to this DeepSeek Harness desktop over a private mesh network such as Tailscale",
   "keywords": [
     "deepseek-harness",
@@ -19,7 +19,7 @@
   "type": "module",
   "engines": {
     "node": ">=24.9.0",
-    "dsh": "0.2.2-rc.1"
+    "dsh": "0.2.2-rc.2"
   },
   "main": "lib/index.js",
   "types": "lib/types/index.d.ts",
@@ -61,18 +61,18 @@
   },
   "peerDependencies": {
     "@deepseek-ai/cordis": "~4.1.0",
-    "@deepseek-ai/dsh-client-locale": "0.2.2-rc.1",
-    "@deepseek-ai/dsh-host-webserver": "0.2.2-rc.1",
+    "@deepseek-ai/dsh-client-locale": "0.2.2-rc.2",
+    "@deepseek-ai/dsh-host-webserver": "0.2.2-rc.2",
     "@deepseek-ai/schemastery": "~3.19.0",
     "react": "^18.2.0",
-    "@deepseek-ai/dsh-client-ui-settings": "0.2.2-rc.1",
-    "@deepseek-ai/dsh-client-ui-settings-general": "0.2.2-rc.1"
+    "@deepseek-ai/dsh-client-ui-settings": "0.2.2-rc.2",
+    "@deepseek-ai/dsh-client-ui-settings-general": "0.2.2-rc.2"
   },
   "devDependencies": {
     "@deepseek-ai/cordis": "~4.1.0",
-    "@deepseek-ai/dsh-client-locale": "0.2.2-rc.1",
-    "@deepseek-ai/dsh-client-ui-slots": "0.2.2-rc.1",
-    "@deepseek-ai/dsh-host-webserver": "0.2.2-rc.1",
+    "@deepseek-ai/dsh-client-locale": "0.2.2-rc.2",
+    "@deepseek-ai/dsh-client-ui-slots": "0.2.2-rc.2",
+    "@deepseek-ai/dsh-host-webserver": "0.2.2-rc.2",
     "@deepseek-ai/schemastery": "~3.19.0",
     "@types/node": "^24.19.2",
     "@types/react": "~18.3.1",
@@ -84,8 +84,8 @@
     "typescript": "^5.7.2",
     "unrun": "^0.3.1",
     "vitest": "^3.0.0",
-    "@deepseek-ai/dsh-client-ui-settings": "0.2.2-rc.1",
-    "@deepseek-ai/dsh-client-ui-settings-general": "0.2.2-rc.1"
+    "@deepseek-ai/dsh-client-ui-settings": "0.2.2-rc.2",
+    "@deepseek-ai/dsh-client-ui-settings-general": "0.2.2-rc.2"
   },
   "packageManager": "pnpm@11.20.0",
   "repository": {
