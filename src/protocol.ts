@@ -12,7 +12,7 @@
 export const PLUGIN_ID = 'dsh-remote-access'
 
 /** Package version, mirrored in `package.json` and pinned by a test. */
-export const VERSION = '0.1.5'
+export const VERSION = '0.1.6'
 
 /** Route paths served by the host half under the web server's route table. */
 export const API = {
